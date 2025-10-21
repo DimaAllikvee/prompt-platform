@@ -1,13 +1,17 @@
-import './App.css'
-import { HeroUIProvider } from "@heroui/react"
-import PromptList from "./components/PromptList.jsx"
+import {Routes, Route, Navigate} from "react-router-dom";
+import Layout from "./components/Layout.jsx";
+import PromptList from "./components/PromptList.jsx";
 
-function App() {
+
+
+export default function App() {
     return (
-        <HeroUIProvider>
-            <PromptList />
-        </HeroUIProvider>
-    )
-}
 
-export default App
+        <Routes>
+            <Route element={<Layout />}>
+                <Route index element={<Navigate to="/browse" replace />} />
+                <Route path="/browse" element={<PromptList />} />
+            </Route>
+        </Routes>
+    );
+}
