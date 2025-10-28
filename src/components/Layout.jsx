@@ -27,11 +27,11 @@ export default function Layout() {
 
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
                     <NavbarItem>
-                        <Link as={NavLink} to="/" color="foreground">
+                        <Link as={NavLink} to="/home" color="foreground">
                             Home
                         </Link>
                     </NavbarItem>
-                    <NavbarItem isActive>
+                    <NavbarItem>
                         <Link as={NavLink} to="/browse" color="foreground">
                             Browse
                         </Link>
@@ -55,10 +55,12 @@ export default function Layout() {
                 </NavbarContent>
             </Navbar>
 
-            {/* Контейнер для контента роутов */}
+
             <main className="max-w-5xl mx-auto p-4">
                 <Outlet />
             </main>
+
+
 
 
         </>

@@ -1,6 +1,6 @@
 import PromptCard from "./PromptCard.jsx";
 import { useEffect, useState } from "react";
-
+import {Pagination} from "@heroui/react";
 const PromptList = () => {
     const [prompts, setPrompts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -34,4 +34,10 @@ const PromptList = () => {
     );
 };
 
+
+
+
+
 export default PromptList;
+
+
