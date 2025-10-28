@@ -4,6 +4,7 @@ import PromptList from "./components/PromptList.jsx";
 import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
+import CreatePrompt from "./components/CreatePrompt.jsx";
 
 export default function App() {
     return (
@@ -15,7 +16,7 @@ export default function App() {
                 <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-
+                <Route path="/create" element={<CreatePrompt />} />
             </Route>
         </Routes>
     );

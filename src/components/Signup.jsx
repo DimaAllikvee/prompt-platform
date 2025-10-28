@@ -27,7 +27,7 @@ export default function Signup() {
                 />
             </div>
 
-            {/* Right: form */}
+
             <div className="flex items-center justify-center bg-background px-6 py-12">
                 <Card shadow="sm" className="w-full max-w-sm" classNames={{base: "border border-default-200"}}>
                     <CardHeader className="flex flex-col gap-1 text-center">

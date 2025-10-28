@@ -32,8 +32,8 @@ export default function Home() {
     const [latest, setLatest] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost/server/prompts.php")
-            .then(result => result.json())
+        fetch("http://localhost/server/api/prompts/getAll.php")
+            .then(res => res.json())
             .then(arr => Array.isArray(arr) ? setLatest(arr.slice(0,3)) : setLatest([]));
     }, []);
 

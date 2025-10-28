@@ -6,7 +6,7 @@ const PromptList = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost/server/prompts.php")
+        fetch("http://localhost/server/api/prompts/getAll.php")
             .then((res) => res.json())
             .then((data) => setPrompts(data))
             .finally(() => setLoading(false));
