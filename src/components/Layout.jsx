@@ -1,7 +1,8 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
     Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button,
 } from "@heroui/react";
+import React from "react";
 
 function AcmeLogo() {
     return (
@@ -17,6 +18,21 @@ function AcmeLogo() {
 }
 
 export default function Layout() {
+    const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+    // Проверяем вход при загрузке
+    React.useEffect(() => {
+        const logged = localStorage.getItem("loggedIn") === "true";
+        setIsLoggedIn(logged);
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("loggedIn");
+        setIsLoggedIn(false);
+        navigate("/login");
+    };
+
     return (
         <>
             <Navbar maxWidth="xl">
@@ -44,25 +60,30 @@ export default function Layout() {
                 </NavbarContent>
 
                 <NavbarContent justify="end">
-                    <NavbarItem className="hidden lg:flex">
-                        <Link as={NavLink} to="/login">Login</Link>
-                    </NavbarItem>
-                    <NavbarItem>
-                        <Button as={NavLink} to="/signup" color="primary" variant="flat">
-                            Sign Up
-                        </Button>
-                    </NavbarItem>
+                    {!isLoggedIn ? (
+                        <>
+                            <NavbarItem className="hidden lg:flex">
+                                <Link as={NavLink} to="/login">Login</Link>
+                            </NavbarItem>
+                            <NavbarItem>
+                                <Button as={NavLink} to="/signup" color="primary" variant="flat">
+                                    Sign Up
+                                </Button>
+                            </NavbarItem>
+                        </>
+                    ) : (
+                        <NavbarItem>
+                            <Button color="danger" variant="flat" onPress={handleLogout}>
+                                Logout
+                            </Button>
+                        </NavbarItem>
+                    )}
                 </NavbarContent>
             </Navbar>
-
 
             <main className="max-w-5xl mx-auto p-4">
                 <Outlet />
             </main>
-
-
-
-
         </>
     );
 }

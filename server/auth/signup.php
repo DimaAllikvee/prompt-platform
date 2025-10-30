@@ -1,39 +1,43 @@
 <?php
-require __DIR__ . '/../config/db.php';
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Content-Type: application/json; charset=utf-8');
 
-$message = "";
-$toastClass = "";
+require __DIR__ . '/../config/db.php'; // здесь создаётся $pdo
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    
-    $checkEmailStmt = $conn->prepare("SELECT email FROM userdata WHERE email = ?");
-    $checkEmailStmt->bind_param("s", $email);
-    $checkEmailStmt->execute();
-    $checkEmailStmt->store_result();
-
-    if ($checkEmailStmt->num_rows > 0) {
-        $message = "Email ID already exists";
-        $toastClass = "#007bff"; 
-    } else {
-        
-        $stmt = $conn->prepare("INSERT INTO userdata (username, email, password) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $username, $email, $password);
-
-        if ($stmt->execute()) {
-            $message = "Account created successfully";
-            $toastClass = "#28a745"; 
-        } else {
-            $message = "Error: " . $stmt->error;
-            $toastClass = "#dc3545";
-        }
-
-        $stmt->close();
+try {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        echo json_encode(['ok' => false, 'error' => 'Invalid request method']);
+        exit;
     }
 
-    $checkEmailStmt->close();
-    $conn->close();
+
+    $username = trim($_POST['username'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+
+    if ($username === '' || $email === '' || $password === '') {
+        echo json_encode(['ok' => false, 'error' => 'Missing required fields']);
+        exit;
+    }
+
+
+    $stmt = $pdo->prepare('SELECT 1 FROM userdata WHERE email = ? LIMIT 1');
+    $stmt->execute([$email]);
+
+    if ($stmt->fetchColumn()) {
+        echo json_encode(['ok' => false, 'error' => 'Email already exists']);
+        exit;
+    }
+
+    
+    $insert = $pdo->prepare('INSERT INTO userdata (username, email, password) VALUES (?, ?, ?)');
+    $insert->execute([$username, $email, $password]);
+
+    echo json_encode(['ok' => true, 'message' => 'Account created successfully']);
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'Server error']);
 }

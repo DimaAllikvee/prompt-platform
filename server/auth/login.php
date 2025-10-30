@@ -1,41 +1,47 @@
 <?php
-require __DIR__ . '/../config/db.php';
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Content-Type: application/json; charset=utf-8');
 
-$message = "";
-$toastClass = "";
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+require __DIR__ . '/../config/db.php'; 
 
+session_start(); 
 
-    $stmt = $conn->prepare("SELECT password FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
+$email    = $_POST['email']    ?? '';
+$password = $_POST['password'] ?? '';
 
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($db_password);
-        $stmt->fetch();
-
-        if ($password === $db_password) {
-            $message = "Login successful";
-            $toastClass = "bg-success";
-        
-            session_start();
-            $_SESSION['email'] = $email;
-            header("Location: dashboard.php");
-            exit();
-        } else {
-            $message = "Incorrect password";
-            $toastClass = "bg-danger";
-        }
-    } else {
-        $message = "Email not found";
-        $toastClass = "bg-warning";
-    }
-
-    $stmt->close();
-    $conn->close();
+if ($email === '' || $password === '') {
+  echo json_encode(['success' => false, 'message' => 'Please fill in all fields']);
+  exit;
 }
-?>
+
+try {
+  
+  $stmt = $pdo->prepare('SELECT id, password, username FROM userdata WHERE email = ? LIMIT 1');
+  $stmt->execute([$email]);
+  $user = $stmt->fetch();
+
+  if (!$user) {
+    echo json_encode(['success' => false, 'message' => 'Email not found']);
+    exit;
+  }
+
+  
+  if ($password !== $user['password']) {
+    echo json_encode(['success' => false, 'message' => 'Incorrect password']);
+    exit;
+  }
+
+ 
+  $_SESSION['user_id']  = $user['id'];
+  $_SESSION['email']    = $email;
+  $_SESSION['username'] = $user['username'];
+
+  echo json_encode(['success' => true, 'message' => 'Login successful']);
+} catch (Throwable $e) {
+  echo json_encode(['success' => false, 'message' => 'Database error']);
+}
