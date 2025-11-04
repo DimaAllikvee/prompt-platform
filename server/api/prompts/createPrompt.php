@@ -11,6 +11,14 @@ $title  = $data['title']  ?? '';
 $type   = $data['type']   ?? 'text';
 $tags   = $data['tags']   ?? '';
 $prompt = $data['prompt'] ?? '';
+$userId = $data['user_id'] ?? null;
+
+if (!$userId) {
+  echo json_encode(["ok" => false, "error" => "Missing user id"]);
+  exit;
+}
+
+
 
 $tagsJson = json_encode(array_map('trim', explode(',', $tags)), JSON_UNESCAPED_UNICODE);
 

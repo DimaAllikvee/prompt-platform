@@ -21,7 +21,7 @@ if ($email === '' || $password === '') {
 
 try {
   
-  $stmt = $pdo->prepare('SELECT id, password, username FROM userdata WHERE email = ? LIMIT 1');
+  $stmt = $pdo->prepare('SELECT id, password, username FROM users WHERE email = ? LIMIT 1');
   $stmt->execute([$email]);
   $user = $stmt->fetch();
 
@@ -45,3 +45,13 @@ try {
 } catch (Throwable $e) {
   echo json_encode(['success' => false, 'message' => 'Database error']);
 }
+
+echo json_encode([
+    'success' => true,
+    'message' => 'Login successful',
+    'user' => [
+      'id' => $user['id'],
+      'username' => $user['username']
+    ]
+  ]);
+?>  
