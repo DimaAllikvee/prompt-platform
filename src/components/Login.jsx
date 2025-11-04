@@ -21,8 +21,11 @@ export default function Login() {
             const data = await res.json();
 
             if (data.success) {
-                localStorage.setItem("loggedIn", "true"); // запоминаем вход
-                navigate("/"); // переход на главную
+                localStorage.setItem("loggedIn", "true");
+                localStorage.setItem("usesr_id", data.user_id);
+                localStorage.setItem("username", data.username);
+                navigate("/home");
+                window.location.reload();
             } else {
                 setMessage(data.message || "Login failed");
             }

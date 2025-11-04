@@ -21,7 +21,7 @@ export default function Layout() {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
-    // Проверяем вход при загрузке
+
     React.useEffect(() => {
         const logged = localStorage.getItem("loggedIn") === "true";
         setIsLoggedIn(logged);

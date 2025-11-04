@@ -19,7 +19,8 @@ export default function CreatePrompt() {
                 title,
                 type,
                 tags: tagsText,
-                prompt
+                prompt,
+                user_id: localStorage.getItem("user_id"),
             })
         });
         navigate("/browse?ts=" + Date.now());
