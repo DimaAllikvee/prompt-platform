@@ -7,9 +7,9 @@ header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
 
-require __DIR__ . '/../config/db.php'; 
+require __DIR__ . '/../config/db.php';
 
-session_start(); 
+session_start();
 
 $email    = $_POST['email']    ?? '';
 $password = $_POST['password'] ?? '';
@@ -20,7 +20,6 @@ if ($email === '' || $password === '') {
 }
 
 try {
-  
   $stmt = $pdo->prepare('SELECT id, password, username FROM users WHERE email = ? LIMIT 1');
   $stmt->execute([$email]);
   $user = $stmt->fetch();
@@ -30,23 +29,16 @@ try {
     exit;
   }
 
-  
   if ($password !== $user['password']) {
     echo json_encode(['success' => false, 'message' => 'Incorrect password']);
     exit;
   }
 
- 
   $_SESSION['user_id']  = $user['id'];
   $_SESSION['email']    = $email;
   $_SESSION['username'] = $user['username'];
 
-  echo json_encode(['success' => true, 'message' => 'Login successful']);
-} catch (Throwable $e) {
-  echo json_encode(['success' => false, 'message' => 'Database error']);
-}
-
-echo json_encode([
+  echo json_encode([
     'success' => true,
     'message' => 'Login successful',
     'user' => [
@@ -54,4 +46,9 @@ echo json_encode([
       'username' => $user['username']
     ]
   ]);
-?>  
+  exit; 
+} catch (Throwable $e) {
+  http_response_code(500);
+  echo json_encode(['success' => false, 'message' => 'Database error']);
+  exit;
+}

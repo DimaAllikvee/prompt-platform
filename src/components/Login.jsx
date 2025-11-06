@@ -22,8 +22,8 @@ export default function Login() {
 
             if (data.success) {
                 localStorage.setItem("loggedIn", "true");
-                localStorage.setItem("usesr_id", data.user_id);
-                localStorage.setItem("username", data.username);
+                localStorage.setItem("user_id", String(data.user.id));
+                localStorage.setItem("username", data.user.username);
                 navigate("/home");
                 window.location.reload();
             } else {
