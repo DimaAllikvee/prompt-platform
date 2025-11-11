@@ -16,6 +16,7 @@ export default function Login() {
             const res = await fetch("http://localhost/server/auth/login.php", {
                 method: "POST",
                 body: formUser,
+                credentials: "include",
             });
 
             const data = await res.json();
