@@ -1,8 +1,8 @@
-import PromptCard from "./PromptCard.jsx";
+import PromptCard from "../components/PromptCard.jsx";
 import { useEffect, useState } from "react";
 import {Button} from "@heroui/react";
 
-const PromptList = () => {
+const Browse = () => {
     const [prompts, setPrompts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedTag, setSelectedTag] = useState(null);
@@ -44,6 +44,6 @@ const PromptList = () => {
     );
 };
 
-export default PromptList;
+export default Browse;
 
 
