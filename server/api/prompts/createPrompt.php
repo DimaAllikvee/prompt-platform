@@ -1,31 +1,39 @@
 <?php
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Content-Type: application/json; charset=utf-8');
 
 require __DIR__ . '/../../config/db.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { 
+    http_response_code(204); 
+    exit; 
+}
 
-$data   = json_decode(file_get_contents("php://input"), true);
+session_start();
+
+$data = json_decode(file_get_contents("php://input"), true);
 
 $slug   = $data['slug']   ?? '';
 $title  = $data['title']  ?? '';
 $type   = $data['type']   ?? 'text';
 $tags   = $data['tags']   ?? '';
 $prompt = $data['prompt'] ?? '';
-$userId = $data['user_id'] ?? null;
-
-if (!$userId) {
-  echo json_encode(["ok" => false, "error" => "Missing user id"]);
-  exit;
-}
-
-
 
 $tagsJson = json_encode(array_map('trim', explode(',', $tags)), JSON_UNESCAPED_UNICODE);
 
-$stmt = $pdo->prepare("
-  INSERT INTO prompts (slug, title, type, tags, prompt, created_at)
-  VALUES (?, ?, ?, ?, ?, NOW())
-");
-$stmt->execute([$slug, $title, $type, $tagsJson, $prompt]);
+$userId = $_SESSION['user_id'] ?? null;
 
-echo json_encode(["ok" => true, "id" => $pdo->lastInsertId()]);
+$stmt = $pdo->prepare("
+  INSERT INTO prompts (slug, title, type, tags, prompt, created_at, user_id)
+  VALUES (?, ?, ?, ?, ?, NOW(), ?)
+");
+$stmt->execute([$slug, $title, $type, $tagsJson, $prompt, $userId]);
+
+echo json_encode([
+    "ok" => true, 
+    "id" => $pdo->lastInsertId(),
+    "user_id" => $userId
+]);

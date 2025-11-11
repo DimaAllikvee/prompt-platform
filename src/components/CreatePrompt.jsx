@@ -14,13 +14,8 @@ export default function CreatePrompt() {
         await fetch("http://localhost/server/api/prompts/createPrompt.php", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                slug: title,
-                title,
-                type,
-                tags: tagsText,
-                prompt,
-                user_id: localStorage.getItem("user_id"),
+            credentials: "include",
+            body: JSON.stringify({slug: title, title, type, tags: tagsText, prompt, user_id: localStorage.getItem("user_id"),
             })
         });
         navigate("/browse?ts=" + Date.now());

@@ -47,7 +47,7 @@ export default function Home() {
                 </p>
                 <div className="mt-6 flex gap-3 justify-center">
                     <Button to="/browse" color="primary">Browse</Button>
-                    <Button to="/create" variant="flat">Create</Button>
+                    <Button as={NavLink} to="/create" variant="flat">Create</Button>
                 </div>
             </section>
 
