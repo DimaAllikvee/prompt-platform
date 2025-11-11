@@ -3,6 +3,7 @@ import {
     Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button,
 } from "@heroui/react";
 import React from "react";
+import Footer from "./Footer.jsx";
 
 function AcmeLogo() {
     return (
@@ -83,7 +84,9 @@ export default function Layout() {
 
             <main className="max-w-5xl mx-auto p-4">
                 <Outlet />
+                <Footer />
             </main>
         </>
     );
 }
+

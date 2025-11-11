@@ -32,7 +32,7 @@ const PromptCard = (props) => {
                     <h3 style={{
                         fontSize: 20,
                         fontWeight: 700,
-                        color: "#1a1a1a",
+                        color: "black",
                         lineHeight: 1.3
                     }}>
                         {title}
