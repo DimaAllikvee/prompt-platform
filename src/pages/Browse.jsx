@@ -7,6 +7,7 @@ export default function Browse() {
     const [loading, setLoading] = useState(true);
     const [selectedTag, setSelectedTag] = useState(null);
 
+
     useEffect(() => {
         fetch("http://localhost/server/api/prompts/getAll.php")
             .then((res) => res.json())
@@ -18,9 +19,16 @@ export default function Browse() {
     if (prompts.length === 0) return <div>No data found</div>;
 
 
-    const filteredPrompts = selectedTag
-        ? prompts.filter((prompt) => prompt.tags.includes(selectedTag))
-        : prompts;
+    let filteredPrompts;
+
+    if (selectedTag) {
+        filteredPrompts = prompts.filter(function(prompt) {
+            return prompt.tags.includes(selectedTag);
+        });
+    } else {
+        filteredPrompts = prompts;
+    }
+
 
 
     return (

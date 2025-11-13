@@ -28,7 +28,7 @@ export default function Layout() {
         setIsLoggedIn(logged);
     }, []);
 
-    const handleLogout = () => {
+    const Logout = () => {
         localStorage.removeItem("loggedIn");
         setIsLoggedIn(false);
         navigate("/login");
@@ -74,7 +74,7 @@ export default function Layout() {
                         </>
                     ) : (
                         <NavbarItem>
-                            <Button color="danger" variant="flat" onPress={handleLogout}>
+                            <Button color="danger" variant="flat" onPress={Logout}>
                                 Logout
                             </Button>
                         </NavbarItem>

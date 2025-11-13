@@ -32,7 +32,7 @@ export default function CreatePrompt() {
                 user_id: localStorage.getItem("user_id"),
             }),
         });
-        navigate("/browse?ts=" + Date.now());
+        navigate("/browse");
     };
 
     return (

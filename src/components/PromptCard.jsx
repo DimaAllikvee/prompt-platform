@@ -100,7 +100,13 @@ const PromptCard = (props) => {
                                 key={tag}
                                 size="sm"
                                 variant="bordered"
-                                onClick={() => onTagClick && onTagClick(tag)}
+
+                                onClick={() => {
+                                    if (onTagClick) {
+                                        onTagClick(tag);
+                                    }
+                                }}
+
                                 style={{
                                     cursor: "pointer",
                                     transition: "all 0.2s"
