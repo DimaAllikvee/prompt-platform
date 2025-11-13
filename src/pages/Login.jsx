@@ -6,11 +6,11 @@ export default function Login() {
     const [message, setMessage] = React.useState("");
     const navigate = useNavigate();
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
+    const onSubmit = async (event) => {
+        event.preventDefault();
         setMessage("");
 
-        const formUser = new FormData(e.currentTarget);
+        const formUser = new FormData(event.currentTarget);
 
         try {
             const res = await fetch("http://localhost/server/auth/login.php", {

@@ -1,8 +1,8 @@
 import PromptCard from "../components/PromptCard.jsx";
 import { useEffect, useState } from "react";
-import {Button} from "@heroui/react";
+import { Button } from "@heroui/react";
 
-const Browse = () => {
+export default function Browse() {
     const [prompts, setPrompts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedTag, setSelectedTag] = useState(null);
@@ -19,13 +19,14 @@ const Browse = () => {
 
 
     const filteredPrompts = selectedTag
-    ? prompts.filter(prompt => prompt.tags.includes (selectedTag))
-    : prompts;
+        ? prompts.filter((prompt) => prompt.tags.includes(selectedTag))
+        : prompts;
 
 
     return (
         <div style={{ maxWidth: 900, margin: "0 auto", padding: 16 }}>
             <h1 style={{ marginBottom: 12 }}>Browse Prompts</h1>
+
             <div style={{ display: "grid", gap: 12 }}>
                 {filteredPrompts.map((prompt) => (
                     <PromptCard
@@ -42,8 +43,4 @@ const Browse = () => {
             </div>
         </div>
     );
-};
-
-export default Browse;
-
-
+}

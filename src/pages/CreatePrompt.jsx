@@ -17,8 +17,8 @@ export default function CreatePrompt() {
         }
     }, [navigate]);
 
-    const save = async (e) => {
-        e.preventDefault();
+    const save = async (event) => {
+        event.preventDefault();
         await fetch("http://localhost/server/api/prompts/createPrompt.php", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -40,14 +40,14 @@ export default function CreatePrompt() {
             <h1 className="text-2xl font-bold mb-4">Share Prompt</h1>
 
             <form onSubmit={save} className="flex flex-col gap-4">
-                <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} />
+                <Input label="Title" value={title} onChange={event => setTitle(event.target.value)} />
 
                 <div>
                     <label className="block text-sm font-medium mb-1">Type</label>
                     <select
                         className="border rounded-md px-3 py-2 w-full"
                         value={type}
-                        onChange={e => setType(e.target.value)}
+                        onChange={event => setType(event.target.value)}
                     >
                         <option value="video">video</option>
                         <option value="storyboard">storyboard</option>
@@ -59,14 +59,14 @@ export default function CreatePrompt() {
                     label="Tags (comma separated)"
                     placeholder="anime, intro, Sora2"
                     value={tagsText}
-                    onChange={e => setTagsText(e.target.value)}
+                    onChange={event => setTagsText(event.target.value)}
                 />
 
                 <Textarea
                     label="Prompt"
                     minRows={8}
                     value={prompt}
-                    onChange={e => setPrompt(e.target.value)}
+                    onChange={event => setPrompt(event.target.value)}
                 />
 
                 <div className="flex justify-end">

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardBody, CardHeader, Chip, Link } from "@heroui/react";
 import Header from "../components/Header.jsx";
 
-function PromptPreview({ prompt }) {
+function PromptPreview({ prompt  }) {
     return (
         <Card shadow="sm" className="w-full">
             <CardHeader className="justify-between">
