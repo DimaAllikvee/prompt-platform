@@ -1,68 +1,60 @@
 import React from "react";
-import { Form, Input, Button, Card, Image } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
+import { Button, Card, Image } from "@heroui/react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Login() {
-    const [message, setMessage] = React.useState("");
-    const navigate = useNavigate();
+    const { loginWithRedirect, isLoading } = useAuth0();
 
-    const onSubmit = async (event) => {
-        event.preventDefault();
-        setMessage("");
 
-        const formUser = new FormData(event.currentTarget);
-
-        try {
-            const res = await fetch("http://localhost/server/auth/login.php", {
-                method: "POST",
-                body: formUser,
-                credentials: "include",
-            });
-
-            const data = await res.json();
-
-            if (data.success) {
-                localStorage.setItem("loggedIn", "true");
-                localStorage.setItem("user_id", String(data.user.id));
-                localStorage.setItem("username", data.user.username);
-                navigate("/home");
-                window.location.reload();
-            } else {
-                setMessage(data.message || "Login failed");
-            }
-        } catch (error) {
-            setMessage("Ошибка соединения с сервером");
-        }
+    const handleLogin = () => {
+        loginWithRedirect();
     };
 
-    const onReset = () => setMessage("");
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <p>Загрузка системы авторизации...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+
             <div className="hidden md:flex items-center justify-center bg-default-100">
-                <Image isZoomed alt="Login illustration" src="https://heroui.com/images/fruit-1.jpeg" width={500} className="rounded-lg shadow-lg" />
+                <Image
+                    isZoomed
+                    alt="Login illustration"
+                    src="https://heroui.com/images/fruit-1.jpeg"
+                    width={500}
+                    className="rounded-lg shadow-lg"
+                />
             </div>
 
+
             <div className="flex items-center justify-center bg-background px-6 py-12">
-                <Card shadow="sm" className="w-full max-w-sm p-6 border border-default-200">
-                    <Form className="w-full flex flex-col gap-4" onSubmit={onSubmit} onReset={onReset}>
-                        <h1 className="text-2xl font-semibold text-center">Login</h1>
+                <Card shadow="sm" className="w-full max-w-sm p-8 border border-default-200 flex flex-col items-center">
+                    <h1 className="text-3xl font-bold mb-4 text-center">Welcome</h1>
 
-                        <Input isRequired name="email" type="email" label="Email" labelPlacement="outside" placeholder="Enter your Email" />
-                        <Input isRequired name="password" type="password" label="Password" labelPlacement="outside" placeholder="Enter your password" />
+                    <p className="text-default-500 text-center mb-8">
+                        Для доступа к платформе, пожалуйста, используйте безопасный вход через Auth0.
+                    </p>
 
-                        <div className="flex gap-2">
-                            <Button color="primary" type="submit" fullWidth>Submit</Button>
-                            <Button type="reset" variant="flat" fullWidth>Reset</Button>
-                        </div>
+                    <Button
+                        color="primary"
+                        size="lg"
+                        fullWidth
+                        onClick={handleLogin}
+                        className="font-semibold"
+                    >
+                        Log In / Sign Up
+                    </Button>
 
-                        {message && <div className="text-small text-default-500 text-center">{message}</div>}
-                    </Form>
+                    <p className="text-tiny text-default-400 mt-6 text-center">
+                        Auth0
+                    </p>
                 </Card>
             </div>
         </div>
     );
 }
-
-
-//https://www.heroui.com/docs/components/form

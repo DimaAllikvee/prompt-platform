@@ -1,8 +1,9 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import {
-    Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button,
+    Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, User
 } from "@heroui/react";
 import React from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import Footer from "./Footer.jsx";
 
 function AcmeLogo() {
@@ -19,27 +20,26 @@ function AcmeLogo() {
 }
 
 export default function Layout() {
-    const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
 
-    React.useEffect(() => {
-        const logged = localStorage.getItem("loggedIn") === "true";
-        setIsLoggedIn(logged);
-    }, []);
+    //  console.log("ДАННЫЕ ПОЛЬЗОВАТЕЛЯ ИЗ AUTH0:", user);
 
-    const Logout = () => {
-        localStorage.removeItem("loggedIn");
-        setIsLoggedIn(false);
-        navigate("/login");
+
+    const isAdmin = user && user['https://my-app.com/roles']?.includes('admin');
+
+    const handleLogout = () => {
+        logout({ logoutParams: { returnTo: window.location.origin } });
     };
 
     return (
         <>
-            <Navbar maxWidth="xl">
+            <Navbar maxWidth="xl" isBordered>
                 <NavbarBrand className="gap-2">
-                    <AcmeLogo />
-                    <p className="font-bold text-inherit">ACME</p>
+                    <NavLink to="/" className="flex items-center gap-2">
+                        <AcmeLogo />
+                        <p className="font-bold text-inherit">ACME</p>
+                    </NavLink>
                 </NavbarBrand>
 
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
@@ -58,35 +58,65 @@ export default function Layout() {
                             Share Prompt
                         </Link>
                     </NavbarItem>
+
+
+                    {isAdmin && (
+                        <NavbarItem>
+                            <Link as={NavLink} to="/admin" className="text-danger font-bold border-l-2 pl-4 border-default-200">
+                                Admin Panel
+                            </Link>
+                        </NavbarItem>
+                    )}
                 </NavbarContent>
 
                 <NavbarContent justify="end">
-                    {!isLoggedIn ? (
+                    {!isAuthenticated ? (
                         <>
                             <NavbarItem className="hidden lg:flex">
-                                <Link as={NavLink} to="/login">Login</Link>
+                                <Button variant="light" onClick={() => loginWithRedirect()}>
+                                    Login
+                                </Button>
                             </NavbarItem>
                             <NavbarItem>
-                                <Button as={NavLink} to="/signup" color="primary" variant="flat">
+                                <Button
+                                    color="primary"
+                                    variant="flat"
+                                    onClick={() => loginWithRedirect({ authorizationParams: { screen_hint: 'signup' } })}
+                                >
                                     Sign Up
                                 </Button>
                             </NavbarItem>
                         </>
                     ) : (
-                        <NavbarItem>
-                            <Button color="danger" variant="flat" onPress={Logout}>
+                        <div className="flex items-center gap-4">
+                            <User
+                                name={user.nickname || user.name}
+                                description={user.email}
+                                avatarProps={{
+                                    src: user.picture,
+                                    size: "sm",
+                                    isBordered: true,
+                                    color: isAdmin ? "danger" : "primary"
+                                }}
+                            />
+                            <Button
+                                color="danger"
+                                variant="flat"
+                                size="sm"
+                                onPress={handleLogout}
+                            >
                                 Logout
                             </Button>
-                        </NavbarItem>
+                        </div>
                     )}
                 </NavbarContent>
             </Navbar>
 
-            <main className="max-w-5xl mx-auto p-4">
+            <main className="max-w-5xl mx-auto p-4 min-h-[calc(100vh-150px)]">
                 <Outlet />
-                <Footer />
             </main>
+
+            <Footer />
         </>
     );
 }
-

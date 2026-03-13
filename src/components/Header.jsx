@@ -2,6 +2,8 @@ import { Button } from "@heroui/react";
 import { NavLink } from "react-router-dom";
 
 export default function Header() {
+    const userRole = localStorage.getItem("role");
+
     return (
         <section className="py-12 text-center">
             <h1 className="text-4xl font-bold tracking-tight">
@@ -16,9 +18,22 @@ export default function Header() {
                 <Button as={NavLink} to="/browse" color="primary">
                     Browse
                 </Button>
+
                 <Button as={NavLink} to="/create" variant="flat">
                     Create
                 </Button>
+
+
+                {userRole === "admin" && (
+                    <Button
+                        as={NavLink}
+                        to="/admin"
+                        color="danger"
+                        variant="ghost"
+                    >
+                        Admin Panel
+                    </Button>
+                )}
             </div>
         </section>
     );
