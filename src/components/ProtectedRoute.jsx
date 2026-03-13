@@ -6,9 +6,7 @@ export const ProtectedRoute = ({ children, requiredRole }) => {
 
     if (isLoading) return <div>Loading...</div>;
 
-
     if (!isAuthenticated) return <Navigate to="/login" />;
-
 
     if (requiredRole) {
         const roles = user?.['https://my-app.com/roles'] || [];

@@ -23,8 +23,6 @@ export default function Layout() {
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
 
-    //  console.log("ДАННЫЕ ПОЛЬЗОВАТЕЛЯ ИЗ AUTH0:", user);
-
 
     const isAdmin = user && user['https://my-app.com/roles']?.includes('admin');
 

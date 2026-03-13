@@ -7,26 +7,8 @@ import CreatePrompt from "./pages/CreatePrompt";
 import AdminPanel from "./pages/AdminPanel";
 import Login from "./pages/Login";
 
-const ProtectedRoute = ({ children, requiredRole }) => {
-    const { user, isAuthenticated, isLoading } = useAuth0();
-
-    if (isLoading) return null;
-
-
-    if (!isAuthenticated) {
-        return <Navigate to="/login" />;
-    }
-
-
-    if (requiredRole) {
-        const roles = user?.['https://my-app.com/roles'] || [];
-        if (!roles.includes(requiredRole)) {
-            return <Navigate to="/" />;
-        }
-    }
-
-    return children;
-};
+// 1. ИМПОРТИРУЕМ ИЗ ФАЙЛА (вместо того чтобы писать тут)
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
     const { isLoading, error } = useAuth0();
@@ -50,13 +32,12 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<Layout />}>
-
                 <Route index element={<Home />} />
                 <Route path="home" element={<Home />} />
                 <Route path="browse" element={<Browse />} />
                 <Route path="login" element={<Login />} />
 
-
+                {/* Используем импортированный ProtectedRoute */}
                 <Route
                     path="create"
                     element={
@@ -65,7 +46,6 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
-
 
                 <Route
                     path="admin"

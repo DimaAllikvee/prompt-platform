@@ -1,8 +1,12 @@
 import { Button } from "@heroui/react";
 import { NavLink } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Header() {
-    const userRole = localStorage.getItem("role");
+    const { user } = useAuth0();
+
+
+    const isAdmin = user && user['https://my-app.com/roles']?.includes('admin');
 
     return (
         <section className="py-12 text-center">
@@ -19,12 +23,13 @@ export default function Header() {
                     Browse
                 </Button>
 
+
                 <Button as={NavLink} to="/create" variant="flat">
                     Create
                 </Button>
 
 
-                {userRole === "admin" && (
+                {isAdmin && (
                     <Button
                         as={NavLink}
                         to="/admin"
