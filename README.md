@@ -10,22 +10,22 @@ A web application for sharing prompts, search for suitable prompts.
 
 ## Features
 
-* Show a list of all prompts.
-* Show a prompt by ID.
-* Add a new prompt.
-* Update a prompt.
-* Delete a prompt.
-* Show prompts by author.
-* Show prompts by tag.
-* Search prompts by title or content.
-* Show all tags.
-* Add a tag.
-* Delete a tag.
-* Show all users.
-* Show a user by ID.
-* Add a new user.
-* Update user data.
-* Delete a user.
+* Show a list of all prompts
+* Show a prompt by ID
+* Add a new prompt
+* Update a prompt
+* Delete a prompt
+* Show prompts by author
+* Show prompts by tag
+* Search prompts by title or content
+* Show all tags
+* Add a tag
+* Delete a tag
+* Show all users
+* Show a user by ID
+* Add a new user
+* Update user data
+* Delete a user
 
 ## User Roles
 
